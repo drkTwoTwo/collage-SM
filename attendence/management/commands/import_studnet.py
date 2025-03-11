@@ -7,11 +7,11 @@ import os
 def get_class_from_roll(roll):
     roll_lower = roll.lower()
     if 'cs' in roll_lower:
-        return 'CSE6'
+        return 'CSE4'
     elif 'pt' in roll_lower:
-        return 'PT6'
+        return 'PT4'
     elif 'el' in roll_lower:
-        return 'EL6'
+        return 'EL4'
     else:
         return 'UNKNOWN'
 
