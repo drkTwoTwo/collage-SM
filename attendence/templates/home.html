@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f7f5, #e6f0ec); /* Subtle minty light gradient */
+            color: #2d3748; /* Clean dark gray */
+            min-height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #38b2ac, #63b3ed); /* Cool teal-to-blue gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px rgba(56, 178, 172, 0.3), 0 0 10px rgba(99, 179, 237, 0.2); }
+            100% { text-shadow: 0 0 10px rgba(56, 178, 172, 0.5), 0 0 15px rgba(99, 179, 237, 0.3); }
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #e53e3e, #f56565); /* Subtle red gradient */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(229, 62, 62, 0.2);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .logout-btn:active {
+            transform: scale(0.98);
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns on phones */
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95); /* Clean white with slight transparency */
+            padding: 35px 15px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05); /* Soft shadow */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(56, 178, 172, 0.2); /* Teal shadow on hover */
+        }
+
+        .card:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: #2d3748; /* Dark gray */
+            line-height: 1.2;
+            transition: color 0.3s ease;
+        }
+
+        .card:hover h2 {
+            color: #38b2ac; /* Teal accent on hover */
+        }
+
+        /* Remove the shimmer effect for a cleaner look */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(56, 178, 172, 0.1), rgba(255, 255, 255, 0));
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .logout-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .card {
+                padding: 25px 10px;
+                min-height: 110px;
+            }
+
+            .card h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 15px 0;
+                flex-direction: column; /* Stack title and button on very small screens */
+                gap: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .logout-btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+
+            .card-container {
+                gap: 15px;
+            }
+
+            .card {
+                padding: 20px 10px;
+                min-height: 100px;
+            }
+
+            .card h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Expand on PCs */
+        @media (min-width: 769px) {
+            .card-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Expandable grid */
+            }
+
+            .card {
+                padding: 40px 20px;
+                min-height: 150px;
+            }
+
+            .card h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Teacher Dashboard</h1>
+            <button class="logout-btn" onclick="location.href='{% url 'logout_view' %}'">Logout</button>
+        </div>
+        <div class="card-container">
+            <div class="card" onclick="location.href='{% url 'preAttend' %}'">
+                <h2>📋 Take Attendance</h2>
+            </div>
+            <div class="card" onclick="location.href='{% url 'student_attendance' %}'">
+                <h2>📊 View Student's Attendance</h2>
+            </div>
+            <div class="card" onclick="location.href='/view-nc-dc/'">
+                <h2>⚠️ View NC/DC</h2>
+            </div>
+            <div class="card" onclick="location.href='/my-classes/'">
+                <h2>📚 My Classes</h2>
+            </div>
+            <div class="card" onclick="location.href='/view-syllabus/'">
+                <h2>📘 View Syllabus</h2>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

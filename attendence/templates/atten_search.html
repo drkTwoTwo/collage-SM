@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Search</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0); /* Light slate gradient */
+            color: #1a202c; /* Deep slate for text */
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #319795; /* Soft teal */
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(49, 151, 149, 0.2); /* Futuristic glow */
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(49, 151, 149, 0.1); /* Subtle teal border */
+        }
+
+        .search-container label {
+            font-size: 1.1rem;
+            color: #4a5568; /* Medium slate */
+            margin-right: 15px;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0; /* Light slate border */
+            border-radius: 8px;
+            outline: none;
+            font-size: 1rem;
+            width: 250px;
+            background: #f7fafc; /* Very light slate */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #319795; /* Teal on focus */
+            box-shadow: 0 0 10px rgba(49, 151, 149, 0.3); /* Futuristic glow */
+        }
+
+        button {
+            padding: 12px 25px;
+            margin-left: 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #319795, #4fd1c5); /* Teal gradient */
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(49, 151, 149, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(49, 151, 149, 0.4);
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #edf2f7; /* Very subtle slate border */
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(49, 151, 149, 0.15); /* Teal shadow */
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            color: #1a202c; /* Deep slate */
+            margin: 0 0 15px 0;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            color: #4a5568; /* Medium slate */
+            margin: 8px 0;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            height: 200px;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #718096; /* Light slate */
+            margin-top: 20px;
+        }
+
+        h2.results-header {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #1a202c;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .search-container {
+                padding: 15px;
+            }
+
+            input[type="text"] {
+                width: 200px;
+                padding: 10px 15px;
+            }
+
+            button {
+                padding: 10px 20px;
+                margin-left: 10px;
+            }
+
+            .card {
+                padding: 20px;
+                margin: 15px auto;
+            }
+
+            .card h3 {
+                font-size: 1.3rem;
+            }
+
+            .card p {
+                font-size: 1rem;
+            }
+
+            .chart-container {
+                max-width: 250px;
+                height: 180px;
+            }
+
+            h2.results-header {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>📊 Student Attendance Search</h1>
+
+    <div class="search-container">
+        <form method="GET" action="">
+            <label for="roll_number">Enter Roll Number:</label>
+            <input type="text" id="roll_number" name="roll_number" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    {% if student %}
+        <h2 class="results-header">Results for: {{ student.name }} ({{ student.roll_number }})</h2>
+
+        {% for record in attendance_data %}
+            <div class="card">
+                <h3>{{ record.course_name }}</h3>
+                <p>Total Classes: {{ record.total_classes }}</p>
+                <p>Attended Classes: {{ record.attended_classes }}</p>
+                <div class="chart-container">
+                    <canvas id="chart-{{ forloop.counter }}"></canvas>
+                </div>
+                <script>
+                    const ctx{{ forloop.counter }} = document.getElementById('chart-{{ forloop.counter }}').getContext('2d');
+                    new Chart(ctx{{ forloop.counter }}, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Present', 'Absent'],
+                            datasets: [{
+                                data: [{{ record.percentage }}, {{ record.percentage_absent }}],
+                                backgroundColor: ['#319795', '#e53e3e'], /* Teal and red */
+                                borderWidth: 1,
+                                borderColor: '#fff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '65%', /* Sleek, futuristic cutout */
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        font: { size: 12, weight: '500' },
+                                        color: '#4a5568', /* Medium slate */
+                                        padding: 10
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        {% endfor %}
+
+    {% elif request.GET.roll_number %}
+        <p class="no-results">No student found with this roll number.</p>
+    {% endif %}
+</body>
+</html>

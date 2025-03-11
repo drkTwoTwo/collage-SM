@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Attendance - {{ class_obj }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(145deg, #f0f4e1, #d9e0b8), radial-gradient(circle, rgba(255, 255, 255, 0.1), rgba(200, 210, 160, 0.2));
+            color: #2a3523;
+            min-height: 100vh;
+            overscroll-behavior: none;
+        }
+
+        h2 {
+            margin-top: 40px;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #3f5e25;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 85vw;
+            max-width: 900px;
+            margin-top: 20px;
+            padding-bottom: 100px;
+        }
+
+        form {
+            overflow-y: auto;
+            max-height: 90vh;
+            width: 100%;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            touch-action: pan-y;
+        }
+
+        form::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Swipe Card Styling */
+        .swipe-wrapper {
+            width: 70%;
+            max-width: 800px;
+            border-radius: 25px;
+            overflow: hidden;
+            background: #f5f7e5;
+            box-shadow: 0 8px 20px rgba(63, 94, 37, 0.15);
+            transition: transform 0.2s ease;
+            user-select: none;
+            position: relative;
+            touch-action: none;
+        }
+
+        .swipe-wrapper:hover {
+            transform: translateY(-3px);
+        }
+
+        .swipe-content {
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: center;
+            width: 100%;
+            padding: 35px;
+            box-sizing: border-box;
+            background: #f5f7e5;
+            border-radius: 25px;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            transform-origin: center;
+        }
+
+        .student-card {
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .student-card h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #2a3523;
+            font-weight: 500;
+        }
+
+        .student-card p {
+            margin: 10px 0 0;
+            font-size: 0.95rem;
+            color: #4f5e3e;
+        }
+
+        /* Color Styling for Present/Absent */
+        .present::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(94, 158, 56, 0.25), rgba(224, 236, 198, 0.1));
+            border-radius: 25px;
+            z-index: 0;
+            opacity: 0.9;
+        }
+
+        .present::after {
+            content: '✔';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 35px;
+            height: 35px;
+            background: #5e9e38;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 10px rgba(94, 158, 56, 0.4);
+            z-index: 2;
+        }
+
+        .absent::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(224, 79, 79, 0.25), rgba(252, 228, 228, 0.1));
+            border-radius: 25px;
+            z-index: 0;
+            opacity: 0.9;
+        }
+
+        .absent::after {
+            content: '✘';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 35px;
+            height: 35px;
+            background: #e04f4f;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 10px rgba(224, 79, 79, 0.4);
+            z-index: 2;
+        }
+
+        .status-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: 600;
+            opacity: 0;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: rgba(245, 247, 229, 0.9);
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+
+        /* Button Styling */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 40px 0;
+        }
+
+        button {
+            padding: 15px 70px;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #ffffff;
+            background: #5e9e38;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(94, 158, 56, 0.25);
+        }
+
+        button:hover {
+            background: #4f8630;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(94, 158, 56, 0.35);
+        }
+
+        /* Media Query for Mobile */
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 1.8rem;
+            }
+            .swipe-content {
+                padding: 40px;
+            }
+            .student-card h3 {
+                font-size: 1.7rem;
+            }
+            .student-card p {
+                font-size: 1rem;
+            }
+            button {
+                padding: 12px 50px;
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h2>{{ class_obj }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="container" id="studentContainer">
+            {% for student in students %}
+            <div class="swipe-wrapper" 
+                 data-roll="{{ student.roll }}"
+                 ontouchstart="startSwipe(event)"
+                 ontouchmove="moveSwipe(event)"
+                 ontouchend="endSwipe(event)"
+                 onmousedown="startSwipe(event)"
+                 onmousemove="moveSwipe(event)"
+                 onmouseup="endSwipe(event)">
+                <div class="swipe-content student-card" id="student-{{ student.roll }}">
+                    <h3>{{ student.name }}</h3>
+                    <p>Roll No: {{ student.roll }}</p>
+                    <input type="hidden" name="attendance_{{ student.roll }}" value="off">
+                    <div class="status-label" id="status-{{ student.roll }}"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="button-container">
+            <button type="submit">Submit Attendance</button>
+        </div>
+    </form>
+
+    <script>
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        let isSwiping = false;
+        let currentCard = null;
+        let velocity = 0;
+        const container = document.getElementById('studentContainer');
+        let touchStartTime = 0;
+        const swipeWrappers = document.querySelectorAll('.swipe-wrapper');
+
+        function startSwipe(event) {
+            touchStartTime = Date.now();
+            startX = event.type.includes('touch') ? event.touches[0].clientX : event.clientX;
+            startY = event.type.includes('touch') ? event.touches[0].clientY : event.clientY;
+            currentCard = event.currentTarget.querySelector('.swipe-content');
+            currentCard.style.transition = 'none';
+            velocity = 0;
+            isSwiping = true;
+            event.preventDefault();
+        }
+
+        function moveSwipe(event) {
+            if (!isSwiping || !currentCard) return;
+
+            currentX = event.type.includes('touch') ? event.touches[0].clientX : event.clientX;
+            currentY = event.type.includes('touch') ? event.touches[0].clientY : event.clientY;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            velocity = diffX * 0.1;
+
+            // If vertical movement dominates, allow scrolling instead of swiping
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 20) {
+                isSwiping = false;
+                currentCard.style.transition = 'all 0.3s ease';
+                currentCard.style.transform = 'translateX(0) rotate(0deg) scale(1)';
+                currentCard.style.opacity = '1';
+                return;
+            }
+
+            event.preventDefault();
+
+            const tiltAngle = Math.min(Math.max(diffX / 20, -15), 15);
+            const scale = 1 - Math.abs(diffX) / 1000;
+            const opacity = 1 - Math.abs(diffX) / 400;
+            currentCard.style.transform = `translateX(${diffX}px) rotate(${tiltAngle}deg) scale(${scale})`;
+            currentCard.style.opacity = opacity;
+
+            const label = currentCard.querySelector('.status-label');
+            if (diffX > 80) {
+                label.textContent = 'PRESENT';
+                label.style.color = '#5e9e38';
+                label.style.opacity = '1';
+            } else if (diffX < -80) {
+                label.textContent = 'ABSENT';
+                label.style.color = '#e04f4f';
+                label.style.opacity = '1';
+            } else {
+                label.style.opacity = '0';
+            }
+        }
+
+        function endSwipe(event) {
+						if (!isSwiping || !currentCard) return;
+
+						const diffX = currentX - startX;
+						const touchDuration = Date.now() - touchStartTime;
+						currentCard.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+						const finalX = diffX + velocity * 10;
+						if (finalX > 80 && touchDuration > 100) {
+								markAttendance(currentCard, true);
+						} else if (finalX < -80 && touchDuration > 100) {
+								markAttendance(currentCard, false);
+						}
+
+						currentCard.style.transform = 'translateX(0) rotate(0deg) scale(1)';
+						currentCard.style.opacity = '1';
+
+						const label = currentCard.querySelector('.status-label');
+						setTimeout(() => {
+								label.style.opacity = '0';
+						}, 300);
+
+						// Auto-scroll logic
+						const form = document.querySelector('form');
+						const currentWrapper = event.currentTarget;
+						const swipeWrappers = document.getElementsByClassName('swipe-wrapper');
+						const currentIndex = Array.from(swipeWrappers).indexOf(currentWrapper);
+						const windowHeight = window.innerHeight;
+
+						if (currentIndex < swipeWrappers.length - 1) {
+								const nextWrapper = swipeWrappers[currentIndex + 1];
+								const nextRect = nextWrapper.getBoundingClientRect();
+								if (nextRect.bottom > windowHeight) {
+								    // Next card is partially or fully below viewport, scroll to make it fully visible
+								    const scrollAmount = nextRect.bottom - windowHeight + 100; // Small buffer
+								    form.scrollTo({
+								        top: form.scrollTop + scrollAmount,
+								        behavior: 'smooth'
+								    });
+								}
+						} else if (currentIndex === swipeWrappers.length - 1) {
+								// Last card swiped, ensure it's fully visible
+								const currentRect = currentWrapper.getBoundingClientRect();
+								if (currentRect.bottom > windowHeight) {
+								    const scrollAmount = currentRect.bottom - windowHeight + 10;
+								    form.scrollTo({
+								        top: form.scrollTop + scrollAmount,
+								        behavior: 'smooth'
+								    });
+								}
+						}
+
+						isSwiping = false;
+						currentCard = null;
+				}
+        function markAttendance(card, isPresent) {
+            const input = card.querySelector('input');
+            input.value = isPresent ? 'on' : 'off';
+            card.classList.toggle('present', isPresent);
+            card.classList.toggle('absent', !isPresent);
+        }
+
+        // Helper function to get visible cards
+        function getVisibleCards() {
+            const windowHeight = window.innerHeight;
+            const visibleCards = Array.from(swipeWrappers).filter(wrapper => {
+                const rect = wrapper.getBoundingClientRect();
+                return rect.top >= 0 && rect.bottom <= windowHeight;
+            });
+            return visibleCards;
+        }
+
+        document.addEventListener('touchmove', (e) => {
+            if (isSwiping) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+
+</body>
+
+</html>

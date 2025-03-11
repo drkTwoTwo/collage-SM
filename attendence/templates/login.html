@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Attendance</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f0f4f8, #e8edf3); /* Clean light gray gradient */
+            overflow: hidden;
+        }
+
+        .login-container {
+            text-align: center;
+            margin:20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.95); /* Cleaner white with slight transparency */
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05); /* Softer shadow */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: #2d3748; /* Clean dark gray */
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #4a90e2, #87ceeb); /* Soft blue gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(74, 144, 226, 0.2); /* Subtle shadow */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 1.2rem;
+            color: #4a5568; /* Clean medium gray */
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input {
+            margin: 15px 0;
+            padding: 15px;
+            font-size: 1.2rem;
+            width: 85%;
+            border: 1px solid #e2e8f0; /* Clean light gray border */
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background: #fff;
+        }
+
+        input:focus {
+            border-color: #4a90e2; /* Soft blue accent */
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.3); /* Cleaner glow */
+        }
+
+        button {
+            margin: 20px 0;
+            padding: 15px;
+            font-size: 1.3rem;
+            width: 85%;
+            background: linear-gradient(90deg, #4a90e2, #87ceeb); /* Soft blue gradient */
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2); /* Subtle shadow */
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 25px;
+                max-width: 90%;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            label {
+                font-size: 1rem;
+            }
+
+            input {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .login-container {
+                padding: 50px;
+                max-width: 500px;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+            }
+
+            label {
+                font-size: 1.3rem;
+            }
+
+            input {
+                padding: 18px;
+                font-size: 1.3rem;
+            }
+
+            button {
+                padding: 18px;
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Enter Teacher ID</h2>
+        <form id="loginForm" method="POST">
+            {% csrf_token %}
+            <label for="teacherID">Teacher ID:</label>
+            <input type="text" id="teacherID" name="teacher_id" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
