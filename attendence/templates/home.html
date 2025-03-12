@@ -10,8 +10,8 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f0f7f5, #e6f0ec); /* Subtle minty light gradient */
-            color: #2d3748; /* Clean dark gray */
+            background: linear-gradient(135deg, #f0f7f5, #e6f0ec);
+            color: #2d3748;
             min-height: 100vh;
             overflow-y: auto;
             display: flex;
@@ -36,13 +36,33 @@
 
         h1 {
             font-size: 2.5rem;
-            background: linear-gradient(90deg, #38b2ac, #63b3ed); /* Cool teal-to-blue gradient */
+            background: linear-gradient(90deg, #38b2ac, #63b3ed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
             animation: glow 2s ease-in-out infinite alternate;
             margin: 0;
             letter-spacing: 1px;
+        }
+
+        .heads h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #f56565, #ed8936);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px rgba(245, 101, 101, 0.4);
+            animation: pulse 1.5s ease-in-out infinite alternate;
+            margin: auto;
+            letter-spacing: 1.5px;
+        }
+
+        @keyframes pulse {
+            from {
+                text-shadow: 0 0 12px rgba(245, 101, 101, 0.4);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(237, 137, 54, 0.7);
+            }
         }
 
         @keyframes glow {
@@ -52,7 +72,7 @@
 
         .logout-btn {
             padding: 10px 20px;
-            background: linear-gradient(90deg, #e53e3e, #f56565); /* Subtle red gradient */
+            background: linear-gradient(90deg, #e53e3e, #f56565);
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -74,7 +94,7 @@
 
         .card-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on phones */
+            grid-template-columns: repeat(2, 1fr);
             gap: 25px;
             justify-content: center;
             margin-top: 20px;
@@ -82,17 +102,17 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95); /* Clean white with slight transparency */
-            padding: 35px 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px 10px;
             border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05); /* Soft shadow */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.5);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            min-height: 130px;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,7 +121,7 @@
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(56, 178, 172, 0.2); /* Teal shadow on hover */
+            box-shadow: 0 10px 30px rgba(56, 178, 172, 0.2);
         }
 
         .card:active {
@@ -111,17 +131,36 @@
 
         .card h2 {
             margin: 0;
-            font-size: 1.6rem;
-            color: #2d3748; /* Dark gray */
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
             line-height: 1.2;
-            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .card h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #38b2ac;
+            transition: width 0.3s ease, left 0.3s ease;
         }
 
         .card:hover h2 {
-            color: #38b2ac; /* Teal accent on hover */
+            color: #38b2ac;
+            transform: translateY(-2px);
         }
 
-        /* Remove the shimmer effect for a cleaner look */
+        .card:hover h2::after {
+            width: 60%;
+            left: 20%;
+        }
+
         .card::before {
             content: '';
             position: absolute;
@@ -134,11 +173,13 @@
             opacity: 0.5;
         }
 
-        /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
+            .heads h2{
+                font-size: 1rem;
+                }
 
             .logout-btn {
                 padding: 8px 16px;
@@ -146,12 +187,12 @@
             }
 
             .card {
-                padding: 25px 10px;
-                min-height: 110px;
+                padding: 20px 8px;
+                min-height: 90px;
             }
 
             .card h2 {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
         }
 
@@ -162,7 +203,7 @@
 
             .header {
                 padding: 15px 0;
-                flex-direction: column; /* Stack title and button on very small screens */
+                flex-direction: column;
                 gap: 15px;
             }
 
@@ -180,28 +221,27 @@
             }
 
             .card {
-                padding: 20px 10px;
-                min-height: 100px;
+                padding: 15px 8px;
+                min-height: 80px;
             }
 
             .card h2 {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
         }
 
-        /* Expand on PCs */
         @media (min-width: 769px) {
             .card-container {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Expandable grid */
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             }
 
             .card {
-                padding: 40px 20px;
-                min-height: 150px;
+                padding: 30px 15px;
+                min-height: 120px;
             }
 
             .card h2 {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
         }
     </style>
@@ -209,7 +249,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🚀 Teacher Dashboard</h1>
+            <div class="heads">
+                <h1>🚀 Teacher Dashboard</h1>
+                <h2>Welcome, {{ request.session.teacher_name }}</h2>
+            </div>
             <button class="logout-btn" onclick="location.href='{% url 'logout_view' %}'">Logout</button>
         </div>
         <div class="card-container">

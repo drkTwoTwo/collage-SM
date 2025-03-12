@@ -164,15 +164,16 @@
 </div>
 
 <script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-        e.preventDefault();  // Prevent default form submission
+	document.getElementById("loginForm").addEventListener("submit", function (e) {
+	    e.preventDefault();  // Prevent default form submission
 
-        const classID = document.getElementById("classID").value;
-        if (classID) {
-            // Redirect to the attendance_view URL with the class_id dynamically
-            window.location.href = `/attendance/${classID}/`;
-        }
-    });
+	    const classID = document.getElementById("classID").value.toUpperCase(); // Convert to uppercase
+	    if (classID) {
+		// Redirect to the attendance_view URL with the uppercase class_id
+		window.location.href = `/attendance/${classID}/`;
+	    }
+	});
+
 </script>
 
 

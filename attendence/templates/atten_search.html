@@ -10,8 +10,8 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0); /* Light slate gradient */
-            color: #1a202c; /* Deep slate for text */
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            color: #1a202c;
             line-height: 1.6;
             min-height: 100vh;
         }
@@ -20,9 +20,9 @@
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 40px;
-            color: #319795; /* Soft teal */
+            color: #319795;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(49, 151, 149, 0.2); /* Futuristic glow */
+            text-shadow: 0 0 10px rgba(49, 151, 149, 0.2);
         }
 
         .search-container {
@@ -35,30 +35,30 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            border: 1px solid rgba(49, 151, 149, 0.1); /* Subtle teal border */
+            border: 1px solid rgba(49, 151, 149, 0.1);
         }
 
         .search-container label {
             font-size: 1.1rem;
-            color: #4a5568; /* Medium slate */
+            color: #4a5568;
             margin-right: 15px;
             font-weight: 500;
         }
 
         input[type="text"] {
             padding: 12px 20px;
-            border: 1px solid #e2e8f0; /* Light slate border */
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             outline: none;
             font-size: 1rem;
             width: 250px;
-            background: #f7fafc; /* Very light slate */
+            background: #f7fafc;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         input[type="text"]:focus {
-            border-color: #319795; /* Teal on focus */
-            box-shadow: 0 0 10px rgba(49, 151, 149, 0.3); /* Futuristic glow */
+            border-color: #319795;
+            box-shadow: 0 0 10px rgba(49, 151, 149, 0.3);
         }
 
         button {
@@ -66,7 +66,7 @@
             margin-left: 15px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(90deg, #319795, #4fd1c5); /* Teal gradient */
+            background: linear-gradient(90deg, #319795, #4fd1c5);
             color: #fff;
             font-size: 1rem;
             cursor: pointer;
@@ -82,7 +82,7 @@
 
         .card {
             background: #ffffff;
-            border: 1px solid #edf2f7; /* Very subtle slate border */
+            border: 1px solid #edf2f7;
             border-radius: 12px;
             padding: 25px;
             margin: 20px auto;
@@ -93,19 +93,19 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(49, 151, 149, 0.15); /* Teal shadow */
+            box-shadow: 0 6px 20px rgba(49, 151, 149, 0.15);
         }
 
         .card h3 {
             font-size: 1.5rem;
-            color: #1a202c; /* Deep slate */
+            color: #1a202c;
             margin: 0 0 15px 0;
             font-weight: 600;
         }
 
         .card p {
             font-size: 1.1rem;
-            color: #4a5568; /* Medium slate */
+            color: #4a5568;
             margin: 8px 0;
         }
 
@@ -116,10 +116,28 @@
             height: 200px;
         }
 
+        .default-course-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .default-course-container h2 {
+            font-size: 1.6rem;
+            color: #1a202c;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
         .no-results {
             text-align: center;
             font-size: 1.2rem;
-            color: #718096; /* Light slate */
+            color: #718096;
             margin-top: 20px;
         }
 
@@ -131,7 +149,6 @@
             font-weight: 500;
         }
 
-        /* Responsive Adjustments */
         @media (max-width: 480px) {
             h1 {
                 font-size: 2rem;
@@ -169,10 +186,22 @@
                 height: 180px;
             }
 
+            .default-course-container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .default-course-container h2 {
+                font-size: 1.4rem;
+            }
+
             h2.results-header {
                 font-size: 1.5rem;
             }
         }
+	.chart_h1 {
+	    text-align: center;
+	}
     </style>
 </head>
 <body>
@@ -186,8 +215,53 @@
         </form>
     </div>
 
+{% if not student %}
+    <h2 class="chart_h1"> Last 6Th Month Attendance </h2>
+    {% for course in courses %}
+        <div class="default-course-container">
+            <h2>{{ course.name }}</h2>
+            <canvas id="chart-course-{{ forloop.counter }}"></canvas>
+            <script>
+                const ctx{{ forloop.counter }} = document.getElementById('chart-course-{{ forloop.counter }}').getContext('2d');
+                new Chart(ctx{{ forloop.counter }}, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ course.month|safe }},
+                        datasets: [{
+                            label: 'Classes per Month',
+                            data: {{ course.monthly_classes|safe }},
+                            backgroundColor: 'rgba(49, 151, 149, 0.7)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,  // Start y-axis at 0
+                                min: 0,            // Prevent negative values
+                                title: {
+                                    display: true,
+                                    text: 'Number of Classes'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Months'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+    {% empty %}
+        <p class="no-results">No courses available to display.</p>
+    {% endfor %}
+{% endif %}
+
     {% if student %}
-        <h2 class="results-header">Results for: {{ student.name }} ({{ student.roll_number }})</h2>
+        <h2 class="results-header">Results for: {{ student.name }} ({{ student.roll}})</h2>
 
         {% for record in attendance_data %}
             <div class="card">
@@ -205,7 +279,7 @@
                             labels: ['Present', 'Absent'],
                             datasets: [{
                                 data: [{{ record.percentage }}, {{ record.percentage_absent }}],
-                                backgroundColor: ['#319795', '#e53e3e'], /* Teal and red */
+                                backgroundColor: ['#319795', '#e53e3e'],
                                 borderWidth: 1,
                                 borderColor: '#fff'
                             }]
@@ -213,13 +287,13 @@
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            cutout: '65%', /* Sleek, futuristic cutout */
+                            cutout: '65%',
                             plugins: {
                                 legend: {
                                     position: 'bottom',
                                     labels: {
                                         font: { size: 12, weight: '500' },
-                                        color: '#4a5568', /* Medium slate */
+                                        color: '#4a5568',
                                         padding: 10
                                     }
                                 }
