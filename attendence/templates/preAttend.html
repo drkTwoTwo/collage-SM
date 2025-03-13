@@ -167,9 +167,8 @@
 	document.getElementById("loginForm").addEventListener("submit", function (e) {
 	    e.preventDefault();  // Prevent default form submission
 
-	    const classID = document.getElementById("classID").value.toUpperCase(); // Convert to uppercase
+	    const classID = document.getElementById("classID").value.toUpperCase(); 
 	    if (classID) {
-		// Redirect to the attendance_view URL with the uppercase class_id
 		window.location.href = `/attendance/${classID}/`;
 	    }
 	});

@@ -10,7 +10,7 @@ def login_view(request):
         try:
             teacher = Teacher.objects.get(id=teacher_id)
             request.session['teacher_id'] = teacher_id
-            response = redirect(f'/home/?teacher_name={teacher.name}')
+            response = redirect(f'/?teacher_name={teacher.name}')
             response.set_cookie('teacher_id', teacher_id, max_age=7 * 24 * 60 * 60)
             return response
         except Teacher.DoesNotExist:
@@ -18,6 +18,7 @@ def login_view(request):
     return render(request,'login.html')
 
 def home(request):
+    
     if 'teacher_id' not in request.session:
         teacher_id = request.COOKIES.get('teacher_id')
         if teacher_id:
@@ -37,13 +38,18 @@ def preAttend(request):
     if 'teacher_id' not in request.session:
         return redirect('login_view')
     return render(request, 'preAttend.html')
-    return render(request, 'login.html')
+    
     
 def logout_view(request):
     request.session.flush()
     response = redirect('login_view')
     response.delete_cookie('teacher_id')
     return response
+def err_view(request, result):
+    teacher_id = request.session.get('teacher_id')
+    if not teacher_id:
+        return redirect('login_view')
+    return render(request, 'err.html', {'result': result})
 
 def attendance_view(request, class_id):
     teacher_id = request.session.get('teacher_id')
@@ -52,7 +58,8 @@ def attendance_view(request, class_id):
     class_obj = get_object_or_404(Class, id=class_id)
     assigns = Assign.objects.filter(teacher_id=teacher_id, class_id=class_id)
     if not assigns.exists():
-        return redirect('home')
+        result = f"you havn't assign for this {class_id}"
+        return redirect('err_view',result);
     if assigns.count() > 1 and 'assign_course' not in request.GET:
         return redirect('select_assign_view', class_id=class_id)
     assign = assigns.first() if assigns.count() == 1 else get_object_or_404(Assign, course=request.GET.get('assign_course'), teacher=teacher_id)

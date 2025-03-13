@@ -5,24 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Attendance Search</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            color: #1a202c;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            color: #2c3e50;
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         h1 {
+            font-family: 'Montserrat', sans-serif;
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 40px;
-            color: #319795;
+            color: #0984e3;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(49, 151, 149, 0.2);
+            text-shadow: 0 2px 5px rgba(9, 132, 227, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .search-container {
@@ -30,239 +39,297 @@
             margin-bottom: 40px;
             padding: 20px;
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            border: 1px solid rgba(49, 151, 149, 0.1);
+            border: 1px solid rgba(9, 132, 227, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(9, 132, 227, 0.2);
         }
 
         .search-container label {
-            font-size: 1.1rem;
-            color: #4a5568;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            color: #636e72;
             margin-right: 15px;
             font-weight: 500;
         }
 
         input[type="text"] {
             padding: 12px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border: 1px solid #dfe6e9;
+            border-radius: 10px;
             outline: none;
             font-size: 1rem;
             width: 250px;
             background: #f7fafc;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            color: #2d3436;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]::placeholder {
+            color: #b2bec3;
         }
 
         input[type="text"]:focus {
-            border-color: #319795;
-            box-shadow: 0 0 10px rgba(49, 151, 149, 0.3);
+            border-color: #0984e3;
+            box-shadow: 0 0 10px rgba(9, 132, 227, 0.3);
+            background: #fff;
         }
 
         button {
+            font-family: 'Montserrat', sans-serif;
             padding: 12px 25px;
             margin-left: 15px;
             border: none;
-            border-radius: 8px;
-            background: linear-gradient(90deg, #319795, #4fd1c5);
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0984e3, #00cec9);
             color: #fff;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            font-weight: 500;
-            box-shadow: 0 2px 10px rgba(49, 151, 149, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(9, 132, 227, 0.3);
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(49, 151, 149, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(9, 132, 227, 0.5);
+            background: linear-gradient(90deg, #00cec9, #0984e3);
         }
 
         .card {
             background: #ffffff;
-            border: 1px solid #edf2f7;
-            border-radius: 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 15px;
             padding: 25px;
             margin: 20px auto;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(49, 151, 149, 0.15);
+            box-shadow: 0 12px 30px rgba(9, 132, 227, 0.2);
+            border-color: rgba(9, 132, 227, 0.3);
         }
 
         .card h3 {
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.5rem;
-            color: #1a202c;
+            color: #2d3436;
             margin: 0 0 15px 0;
             font-weight: 600;
         }
 
         .card p {
             font-size: 1.1rem;
-            color: #4a5568;
+            color: #636e72;
             margin: 8px 0;
         }
 
         .chart-container {
             width: 100%;
-            max-width: 300px;
+            max-width: 350px; /* Increased for larger charts */
+            height: 300px; /* Increased for better visibility */
             margin: 20px auto;
-            height: 200px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(9, 132, 227, 0.3);
+            background: rgba(9, 132, 227, 0.1);
         }
 
         .default-course-container {
-            width: 100%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 800px; /* Increased to accommodate larger chart */
             margin: 20px auto;
             padding: 20px;
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .default-course-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(9, 132, 227, 0.2);
         }
 
         .default-course-container h2 {
-            font-size: 1.6rem;
-            color: #1a202c;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            color: #2d3436;
             text-align: center;
             margin-bottom: 20px;
             font-weight: 500;
         }
 
         .no-results {
+            font-family: 'Roboto', sans-serif;
             text-align: center;
             font-size: 1.2rem;
-            color: #718096;
+            color: #636e72;
             margin-top: 20px;
         }
 
-        h2.results-header {
+        h2.results-header, .chart_h1 {
+            font-family: 'Montserrat', sans-serif;
             text-align: center;
-            font-size: 1.8rem;
-            color: #1a202c;
+            font-size: 1.6rem;
+            color: #0984e3;
             margin: 20px 0;
             font-weight: 500;
+            text-shadow: 0 1px 3px rgba(9, 132, 227, 0.2);
         }
 
-        @media (max-width: 480px) {
+        /* Responsive Design */
+        @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .search-container {
                 padding: 15px;
+                max-width: 90%;
             }
 
             input[type="text"] {
                 width: 200px;
-                padding: 10px 15px;
             }
 
             button {
                 padding: 10px 20px;
-                margin-left: 10px;
             }
 
-            .card {
-                padding: 20px;
-                margin: 15px auto;
-            }
-
-            .card h3 {
-                font-size: 1.3rem;
-            }
-
-            .card p {
-                font-size: 1rem;
+            .default-course-container, .card {
+                width: 95%;
+                padding: 15px;
+                max-width: 600px; /* Adjusted for tablets */
             }
 
             .chart-container {
-                max-width: 250px;
-                height: 180px;
+                max-width: 90%; /* Full width within container */
+                height: 250px; /* Slightly smaller but still readable */
             }
 
-            .default-course-container {
-                padding: 15px;
-                max-width: 100%;
-            }
-
-            .default-course-container h2 {
-                font-size: 1.4rem;
-            }
-
-            h2.results-header {
-                font-size: 1.5rem;
+            .default-course-container h2, h2.results-header, .chart_h1 {
+                font-size: 1.3rem;
             }
         }
-	.chart_h1 {
-	    text-align: center;
-	}
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input[type="text"] {
+                width: 150px;
+                padding: 10px 15px;
+            }
+
+            button {
+                padding: 8px 15px;
+                margin-left: 10px;
+            }
+
+            .card, .default-course-container {
+                padding: 10px;
+                width: 95%;
+                max-width: 400px; /* Adjusted for phones */
+            }
+
+            .card h3 {
+                font-size: 1.2rem;
+            }
+
+            .card p {
+                font-size: 0.9rem;
+            }
+
+            .chart-container {
+                max-width: 90%; /* Full width within container */
+                height: 200px; /* Adjusted for phones */
+            }
+
+            .default-course-container h2, h2.results-header, .chart_h1 {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>📊 Student Attendance Search</h1>
-
     <div class="search-container">
         <form method="GET" action="">
             <label for="roll_number">Enter Roll Number:</label>
-            <input type="text" id="roll_number" name="roll_number" required>
+            <input type="text" id="roll_number" name="roll_number" placeholder="e.g., NAL/22/CS/022" required>
             <button type="submit">Search</button>
         </form>
     </div>
 
-{% if not student %}
-    <h2 class="chart_h1"> Last 6Th Month Attendance </h2>
-    {% for course in courses %}
-        <div class="default-course-container">
-            <h2>{{ course.name }}</h2>
-            <canvas id="chart-course-{{ forloop.counter }}"></canvas>
-            <script>
-                const ctx{{ forloop.counter }} = document.getElementById('chart-course-{{ forloop.counter }}').getContext('2d');
-                new Chart(ctx{{ forloop.counter }}, {
-                    type: 'bar',
-                    data: {
-                        labels: {{ course.month|safe }},
-                        datasets: [{
-                            label: 'Classes per Month',
-                            data: {{ course.monthly_classes|safe }},
-                            backgroundColor: 'rgba(49, 151, 149, 0.7)'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,  // Start y-axis at 0
-                                min: 0,            // Prevent negative values
-                                title: {
-                                    display: true,
-                                    text: 'Number of Classes'
+    {% if not student %}
+        <h2 class="chart_h1">Last 6 Months Attendance</h2>
+        {% for course in courses %}
+            <div class="default-course-container">
+                <h2>{{ course.name }}</h2>
+                <div class="chart-container">
+                    <canvas id="chart-course-{{ forloop.counter }}"></canvas>
+                </div>
+                <script>
+                    const ctx{{ forloop.counter }} = document.getElementById('chart-course-{{ forloop.counter }}').getContext('2d');
+                    new Chart(ctx{{ forloop.counter }}, {
+                        type: 'bar',
+                        data: {
+                            labels: {{ course.month|safe }},
+                            datasets: [{
+                                label: 'Classes per Month',
+                                data: {{ course.monthly_classes|safe }},
+                                backgroundColor: 'rgba(9, 132, 227, 0.7)',
+                                borderColor: '#0984e3',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    title: { display: true, text: 'Number of Classes', color: '#2d3436', font: { size: 14 } },
+                                    ticks: { color: '#636e72', font: { size: 12 } }
+                                },
+                                x: {
+                                    title: { display: true, text: 'Months', color: '#2d3436', font: { size: 14 } },
+                                    ticks: { color: '#636e72', font: { size: 12 } }
                                 }
                             },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Months'
-                                }
+                            plugins: {
+                                legend: { labels: { color: '#2d3436', font: { size: 12 } } }
                             }
                         }
-                    }
-                });
-            </script>
-        </div>
-    {% empty %}
-        <p class="no-results">No courses available to display.</p>
-    {% endfor %}
-{% endif %}
+                    });
+                </script>
+            </div>
+        {% empty %}
+            <p class="no-results">No courses available to display.</p>
+        {% endfor %}
+    {% endif %}
 
     {% if student %}
-        <h2 class="results-header">Results for: {{ student.name }} ({{ student.roll}})</h2>
-
+        <h2 class="results-header">Results for: {{ student.name }} ({{ student.roll }})</h2>
         {% for record in attendance_data %}
             <div class="card">
                 <h3>{{ record.course_name }}</h3>
@@ -279,7 +346,7 @@
                             labels: ['Present', 'Absent'],
                             datasets: [{
                                 data: [{{ record.percentage }}, {{ record.percentage_absent }}],
-                                backgroundColor: ['#319795', '#e53e3e'],
+                                backgroundColor: ['#0984e3', '#e17055'],
                                 borderWidth: 1,
                                 borderColor: '#fff'
                             }]
@@ -293,7 +360,7 @@
                                     position: 'bottom',
                                     labels: {
                                         font: { size: 12, weight: '500' },
-                                        color: '#4a5568',
+                                        color: '#2d3436',
                                         padding: 10
                                     }
                                 }
@@ -303,7 +370,6 @@
                 </script>
             </div>
         {% endfor %}
-
     {% elif request.GET.roll_number %}
         <p class="no-results">No student found with this roll number.</p>
     {% endif %}
